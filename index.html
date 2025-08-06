@@ -66,7 +66,11 @@
       <h2>2. Дилерский калькулятор</h2>
       <div class="controls">
         <label for="scenario">Сценарий:</label>
-        <select id="scenario"><option data-rep="0.05" data-dealer="0.15" data-ref="0.05">Дилерская продажа (есть Дилер)</option><option data-rep="0.20" data-dealer="0.00" data-ref="0.00">Представительская продажа (нет Дилера)</option><option data-rep="0.00" data-dealer="0.00" data-ref="0.00">Прямая продажа компанией (без канала)</option></select>
+        <select id="scenario">
+          <option data-rep="0.05" data-dealer="0.15" data-ref="0.05">Дилерская продажа (Есть Дилер)</option>
+          <option data-rep="0.20" data-dealer="0.00" data-ref="0.05">Представительская продажа (Нет Дилера)</option>
+          <option data-rep="0.00" data-dealer="0.00" data-ref="0.05">Прямая продажа (Нет Представителя, Нет Дилера)</option>
+        </select>
       </div>
       <div class="controls">
         <label for="shipping">% доставки транспортом:</label>
