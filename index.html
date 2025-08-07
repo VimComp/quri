@@ -206,14 +206,21 @@
     }
 
     // Смена языка
-    langSelect.addEventListener('change', e=>{
-      const lang=e.target.value;
-      document.querySelectorAll('[data-key]').forEach(el=>{
-        const key=el.dataset.key;
-        if(translations[lang][key]) el.textContent=translations[lang][key];
-      });
-      calculateAll();
-    });
+langSelect.addEventListener('change', e=>{
+  const lang = e.target.value;
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const key = el.dataset.key;
+    if (!translations[lang][key]) return;
+    const txt = translations[lang][key];
+    // — если внутри есть вложенные спаны (для цифр) — меняем только первый текстовый узел
+    if (el.firstChild && el.firstChild.nodeType === Node.TEXT_NODE) {
+      el.firstChild.nodeValue = txt;
+    } else {
+      el.textContent = txt;
+    }
+  });
+  calculateAll();
+});
 
     // Остальные обработчики
     currencySelect.addEventListener('change', calculateAll);
