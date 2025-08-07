@@ -13,8 +13,7 @@
     .item { margin-bottom:12px; }
     .item label { display:flex; align-items:center; font-size:16px; }
     .item label span.name { flex:1; text-align:left; }
-    .item label span.price {
-      white-space: nowrap; flex:0 0 80px; text-align:left; font-weight:600; margin-right:10px; }
+    .item label span.price { white-space:nowrap; flex:0 0 80px; text-align:left; font-weight:600; margin-right:10px; }
     .item label input[type="checkbox"] { width:18px; height:18px; margin:0; }
     .controls { margin-bottom:20px; }
     .controls label, .controls input, .controls select { font-size:16px; margin:5px; }
@@ -31,16 +30,25 @@
   <div class="container">
     <img src="0.png" alt="Логотип" class="logo-top-right">
 
-    <h2>1. Прайс</h2>
+    <!-- Языковой селектор -->
     <div class="controls">
-      <label for="currency">Валюта:</label>
+      <select id="lang">
+        <option value="ru" selected>RU</option>
+        <option value="en">EN</option>
+        <option value="pl">PL</option>
+      </select>
+    </div>
+
+    <!-- Раздел 1: Прайс -->
+    <h2 data-key="section1">1. Прайс</h2>
+    <div class="controls">
+      <label for="currency" data-key="currency">Валюта:</label>
       <select id="currency">
         <option value="EUR">Euro (€)</option>
         <option value="PLN">Złoty (zł)</option>
       </select>
     </div>
     <form id="price-form">
-      <!-- позиции -->
       <div class="item"><label><span class="name">Tent Viking</span><span class="price" data-euro="620" data-zl="2700"></span><input type="checkbox" name="item" data-euro="620" data-zl="2700"></label></div>
       <div class="item"><label><span class="name">Tent QT19</span><span class="price" data-euro="680" data-zl="2950"></span><input type="checkbox" name="item" data-euro="680" data-zl="2950"></label></div>
       <div class="item"><label><span class="name">Tent QT25</span><span class="price" data-euro="550" data-zl="2400"></span><input type="checkbox" name="item" data-euro="550" data-zl="2400"></label></div>
@@ -59,14 +67,17 @@
       <div class="item"><label><span class="name">Stone Holder</span><span class="price" data-euro="60" data-zl="250"></span><input type="checkbox" name="item" data-euro="60" data-zl="250"></label></div>
       <div class="item"><label><span class="name">QT - QURI TOP</span><span class="price" data-euro="140" data-zl="550"></span><input type="checkbox" name="item" data-euro="140" data-zl="550"></label></div>
     </form>
-    <p class="total-summary">Общая стоимость: <span id="total-price">0.00</span></p>
 
-    <button id="show-dealer-btn" class="button">Перейти к дилерскому калькулятору</button>
+    <p class="total-summary" data-key="total">Общая стоимость: <span id="total-price">0.00</span></p>
+    <p class="min-order" data-key="minOrder">Минимальный заказ - по одному предмету из секции палаток и один из секции печей.</p>
+    <p class="shipping-info" data-key="shippingInfo">В цену включена доставка до клиента, на материковой части Европы.<br>Доставка на острова и другие континенты - предмет спец запроса.</p>
+
+    <button id="show-dealer-btn" class="button" data-key="goDealer">Перейти к дилерскому калькулятору</button>
 
     <div id="dealer-section">
-      <h2>2. Дилерский калькулятор</h2>
+      <h2 data-key="section2">2. Дилерский калькулятор</h2>
       <div class="controls">
-        <label for="scenario">Сценарий:</label>
+        <label for="scenario" data-key="scenario">Сценарий:</label>
         <select id="scenario">
           <option data-rep="0.05" data-dealer="0.15" data-ref="0.05">Дилерская продажа (Есть Дилер)</option>
           <option data-rep="0.20" data-dealer="0.00" data-ref="0.05">Представительская продажа (Нет Дилера)</option>
@@ -74,38 +85,80 @@
         </select>
       </div>
       <div class="controls">
-        <label for="shipping">% доставки транспортом:</label>
+        <label for="shipping" data-key="shipping">% доставки транспортом:</label>
         <input type="number" id="shipping" value="7" min="0" max="100" step="0.1">%
       </div>
       <div class="controls">
-        <label>Тип расчёта:</label><label><input type="radio" name="payment-type" value="referral" checked>Реферальная выплата</label><label><input type="radio" name="payment-type" value="discount">Скидка</label>
+        <label data-key="calcType">Тип расчёта:</label>
+        <label><input type="radio" name="payment-type" value="referral" checked> <span data-key="referralPayout">Реферальная выплата</span></label>
+        <label><input type="radio" name="payment-type" value="discount"> <span data-key="discount">Скидка</span></label>
       </div>
       <div class="controls">
-        <label><input type="checkbox" id="enable-ref" checked>Учитывать реферальную ставку/скидку (5%)</label>
+        <label><input type="checkbox" id="enable-ref" checked> <span data-key="applyRef">Учитывать реферальную ставку/скидку (5%)</span></label>
       </div>
       <div class="result">
-        <p>Комиссия представителя (<span id="rep-percent">0%</span>): <span id="rep-commission">0.00</span> €</p>
-        <p>Комиссия дилера (<span id="dealer-percent">0%</span>): <span id="dealer-commission">0.00</span> €</p>
-        <p>Реферальная выплата: <span id="referral-commission">0.00</span> €</p>
-        <p>Скидка: <span id="discount-amount">0.00</span> €</p>
-        <p>Стоимость доставки: <span id="shipping-cost">0.00</span> €</p>
-        <p>Чистая выручка компании: <span id="company-net">0.00</span> €</p>
+        <p data-key="repCommission">Комиссия представителя (<span id="rep-percent">0%</span>): <span id="rep-commission">0.00</span> €</p>
+        <p data-key="dealerCommission">Комиссия дилера (<span id="dealer-percent">0%</span>): <span id="dealer-commission">0.00</span> €</p>
+        <p data-key="referralCommission">Реферальная выплата: <span id="referral-commission">0.00</span> €</p>
+        <p data-key="discountAmount">Скидка: <span id="discount-amount">0.00</span> €</p>
+        <p data-key="shippingCost">Стоимость доставки: <span id="shipping-cost">0.00</span> €</p>
+        <p data-key="companyNet">Чистая выручка компании: <span id="company-net">0.00</span> €</p>
+        <p data-key="producerPayment">Оплата производителю: <span id="producer-payment">0.00</span> €</p>
       </div>
-      <button id="hide-dealer-btn" class="button">Свернуть дилерский калькулятор</button>
+      <p class="event-special" data-key="specialEventPrice">Спец цена для мероприятий - 15% от розничной цены. Представителю и дилеру остаются 15% от продажи</p>
+      <button id="hide-dealer-btn" class="button" data-key="hideDealer">Свернуть дилерский калькулятор</button>
     </div>
   </div>
-  <script>
-    const currencySelect=document.getElementById('currency');
-    const priceForm=document.getElementById('price-form');
-    const totalPriceEl=document.getElementById('total-price');
-    const showBtn=document.getElementById('show-dealer-btn');
-    const hideBtn=document.getElementById('hide-dealer-btn');
-    const dealerSec=document.getElementById('dealer-section');
-    const scenarioSelect=document.getElementById('scenario');
-    const shippingInput=document.getElementById('shipping');
-    const enableRefCheckbox=document.getElementById('enable-ref');
 
-    function formatValue(v,c){return c==='PLN'?v.toFixed(2)+' zł':v.toFixed(2)+' €';}
+  <script>
+    const translations = {
+      ru: {
+        section1: '1. Прайс', currency: 'Валюта:', total: 'Общая стоимость:', minOrder: 'Минимальный заказ - по одному предмету из секции палаток и один из секции печей.',
+        shippingInfo: 'В цену включена доставка до клиента, на материковой части Европы.\nДоставка на острова и другие континенты - предмет спец запроса.',
+        goDealer: 'Перейти к дилерскому калькулятору', section2: '2. Дилерский калькулятор', scenario: 'Сценарий:',
+        shipping: '% доставки транспортом:', calcType: 'Тип расчёта:', referralPayout: 'Реферальная выплата', discount: 'Скидка',
+        applyRef: 'Учитывать реферальную ставку/скидку (5%)', repCommission: 'Комиссия представителя (', dealerCommission: 'Комиссия дилера (',
+        referralCommission: 'Реферальная выплата:', discountAmount: 'Скидка:', shippingCost: 'Стоимость доставки:',
+        companyNet: 'Чистая выручка компании:', producerPayment: 'Оплата производителю:',
+        specialEventPrice: 'Спец цена для мероприятий - 15% от розничной цены. Представителю и дилеру остаются 15% от продажи',
+        hideDealer: 'Свернуть дилерский калькулятор'
+      },
+      en: {
+        section1: '1. Price List', currency: 'Currency:', total: 'Total Cost:', minOrder: 'Minimum order - one item from tents and one from stoves.',
+        shippingInfo: 'Price includes delivery to customer within continental Europe.\nDelivery to islands and other continents is subject to special request.',
+        goDealer: 'Go to Dealer Calculator', section2: '2. Dealer Calculator', scenario: 'Scenario:',
+        shipping: 'Shipping %:', calcType: 'Calculation type:', referralPayout: 'Referral payout', discount: 'Discount',
+        applyRef: 'Apply referral rate/discount (5%)', repCommission: 'Representative commission (', dealerCommission: 'Dealer commission (',
+        referralCommission: 'Referral payout:', discountAmount: 'Discount:', shippingCost: 'Shipping cost:',
+        companyNet: 'Company net revenue:', producerPayment: 'Payment to manufacturer:',
+        specialEventPrice: 'Special event price - 15% of retail price. Representative and dealer keep 15% of sale',
+        hideDealer: 'Hide Dealer Calculator'
+      },
+      pl: {
+        section1: '1. Cennik', currency: 'Waluta:', total: 'Całkowity koszt:', minOrder: 'Minimalne zamówienie - jeden przedmiot z sekcji namiotów i jeden z sekcji kuchenek.',
+        shippingInfo: 'Cena obejmuje dostawę do klienta na obszarze kontynentalnej Europy.\nDostawa na wyspy i inne kontynenty wymaga indywidualnego zapytania.',
+        goDealer: 'Przejdź do kalkulatora dilera', section2: '2. Kalkulator Dilera', scenario: 'Scenariusz:',
+        shipping: '% transportu:', calcType: 'Typ obliczeń:', referralPayout: 'Wypłata polecającego', discount: 'Rabat',
+        applyRef: 'Zastosuj stawkę polecającego/rabat (5%)', repCommission: 'Prowizja przedstawiciela (', dealerCommission: 'Prowizja dilera (',
+        referralCommission: 'Wypłata polecającego:', discountAmount: 'Rabat:', shippingCost: 'Koszt transportu:',
+        companyNet: 'Zysk netto firmy:', producerPayment: 'Płatność producentowi:',
+        specialEventPrice: 'Specjalna cena na wydarzenia - 15% ceny detalicznej. Przedstawiciel i diler zachowują 15% sprzedaży',
+        hideDealer: 'Zwiń kalkulator dilera'
+      }
+    };
+
+    const currencySelect = document.getElementById('currency');
+    const langSelect     = document.getElementById('lang');
+    const priceForm      = document.getElementById('price-form');
+    const totalPriceEl   = document.getElementById('total-price');
+    const showBtn        = document.getElementById('show-dealer-btn');
+    const hideBtn        = document.getElementById('hide-dealer-btn');
+    const dealerSec      = document.getElementById('dealer-section');
+    const scenarioSelect = document.getElementById('scenario');
+    const shippingInput  = document.getElementById('shipping');
+    const enableRefCheckbox = document.getElementById('enable-ref');
+
+    function formatValue(v,c){ return c==='PLN'?v.toFixed(2)+' zł':v.toFixed(2)+' €'; }
     function updateItemPrices(){
       const c=currencySelect.value;
       document.querySelectorAll('.price').forEach(el=>{
@@ -113,22 +166,34 @@
         el.textContent=c==='PLN'?zl.toFixed(2)+' zł':eur.toFixed(2)+' €';
       });
     }
+
     function calculateAll(){
       updateItemPrices();
       const c=currencySelect.value;
       let totalE=0, totalD=0;
-      priceForm.querySelectorAll('input[name="item"]:checked').forEach(cb=>{totalE+=parseFloat(cb.dataset.euro); totalD+=c==='PLN'?parseFloat(cb.dataset.zl):parseFloat(cb.dataset.euro);});
+      priceForm.querySelectorAll('input[name="item"]:checked').forEach(cb=>{
+        totalE+=parseFloat(cb.dataset.euro);
+        totalD+=c==='PLN'?parseFloat(cb.dataset.zl):parseFloat(cb.dataset.euro);
+      });
       totalPriceEl.textContent=formatValue(totalD,c);
+
       const opt=scenarioSelect.options[scenarioSelect.selectedIndex];
       const repP=parseFloat(opt.dataset.rep), delP=parseFloat(opt.dataset.dealer), refP=parseFloat(opt.dataset.ref);
       const shipP=parseFloat(shippingInput.value)/100;
-      const pay=document.querySelector('input[name="payment-type"]:checked').value;
-      const en=enableRefCheckbox.checked;
-      const repC=totalE*repP, delC=totalE*delP;
-      let refC=0, disc=0;
-      if(en){ if(pay==='referral') refC=totalE*refP; else disc=totalE*refP; }
       const shipC=totalE*shipP;
-      const net=totalE-repC-delC-refC-disc-shipC;
+      const base=totalE-shipC;
+
+      const repC=base*repP;
+      const delC=base*delP;
+      const payType=document.querySelector('input[name="payment-type"]:checked').value;
+      let refC=0, disc=0;
+      if(enableRefCheckbox.checked){
+        if(payType==='referral') refC=base*refP;
+        else disc=base*refP;
+      }
+      const net=base-repC-delC-refC-disc;
+      const prodPay=shipC+net;
+
       document.getElementById('rep-percent').textContent=(repP*100).toFixed(0)+'%';
       document.getElementById('dealer-percent').textContent=(delP*100).toFixed(0)+'%';
       document.getElementById('rep-commission').textContent=repC.toFixed(2);
@@ -137,24 +202,36 @@
       document.getElementById('discount-amount').textContent=disc.toFixed(2);
       document.getElementById('shipping-cost').textContent=shipC.toFixed(2);
       document.getElementById('company-net').textContent=net.toFixed(2);
+      document.getElementById('producer-payment').textContent=prodPay.toFixed(2);
     }
+
+    // Смена языка
+    langSelect.addEventListener('change', e=>{
+      const lang=e.target.value;
+      document.querySelectorAll('[data-key]').forEach(el=>{
+        const key=el.dataset.key;
+        if(translations[lang][key]) el.textContent=translations[lang][key];
+      });
+      calculateAll();
+    });
+
+    // Остальные обработчики
     currencySelect.addEventListener('change', calculateAll);
     priceForm.addEventListener('change', calculateAll);
     scenarioSelect.addEventListener('change', calculateAll);
     shippingInput.addEventListener('input', calculateAll);
     enableRefCheckbox.addEventListener('change', calculateAll);
-    document.querySelectorAll('input[name="payment-type"]').forEach(r=>r.addEventListener('change',calculateAll));
-    showBtn.addEventListener('click', () => {
-      const pwd = prompt('Введите пароль');
-      if (pwd === 'QuriStyle') {
-        dealerSec.style.display = 'block';
-        showBtn.style.display = 'none';
-        calculateAll();
-      } else {
-        alert('Неверный пароль');
-      }
+    document.querySelectorAll('input[name="payment-type"]').forEach(r=>r.addEventListener('change', calculateAll));
+
+    showBtn.addEventListener('click', ()=>{
+      const pwd=prompt('Введите пароль');
+      if(pwd==='QuriStyle'){ dealerSec.style.display='block'; showBtn.style.display='none'; calculateAll(); }
+      else alert('Неверный пароль');
     });
-    hideBtn.addEventListener('click',()=>{dealerSec.style.display='none'; showBtn.style.display='inline-block';});
+    hideBtn.addEventListener('click', ()=>{
+      dealerSec.style.display='none'; showBtn.style.display='inline-block';
+    });
+
     window.addEventListener('DOMContentLoaded', calculateAll);
   </script>
 </body>
