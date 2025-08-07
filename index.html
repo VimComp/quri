@@ -143,7 +143,16 @@
     shippingInput.addEventListener('input', calculateAll);
     enableRefCheckbox.addEventListener('change', calculateAll);
     document.querySelectorAll('input[name="payment-type"]').forEach(r=>r.addEventListener('change',calculateAll));
-    showBtn.addEventListener('click',()=>{dealerSec.style.display='block'; showBtn.style.display='none'; calculateAll();});
+    showBtn.addEventListener('click', () => {
+      const pwd = prompt('Введите пароль');
+      if (pwd === 'QuriStyle') {
+        dealerSec.style.display = 'block';
+        showBtn.style.display = 'none';
+        calculateAll();
+      } else {
+        alert('Неверный пароль');
+      }
+    });
     hideBtn.addEventListener('click',()=>{dealerSec.style.display='none'; showBtn.style.display='inline-block';});
     window.addEventListener('DOMContentLoaded', calculateAll);
   </script>
