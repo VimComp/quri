@@ -19,6 +19,7 @@
     .controls { margin-bottom:20px; }
     .controls label, .controls input, .controls select { font-size:16px; margin:5px; }
     .result p { margin:8px 0; font-size:16px; }
+    .total-summary { font-size:32px; font-weight:700; color:#d84315; margin-top:20px; }
     .result span { font-weight:600; }
     hr { border:none; border-top:1px solid #ccc; margin:16px 0; }
     .button { display:inline-block; padding:12px 24px; background-color:#f4b400; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; margin:20px auto; font-size:16px; text-align:center; }
@@ -58,7 +59,7 @@
       <div class="item"><label><span class="name">Stone Holder</span><span class="price" data-euro="60" data-zl="250"></span><input type="checkbox" name="item" data-euro="60" data-zl="250"></label></div>
       <div class="item"><label><span class="name">QT - QURI TOP</span><span class="price" data-euro="140" data-zl="550"></span><input type="checkbox" name="item" data-euro="140" data-zl="550"></label></div>
     </form>
-    <p>Общая стоимость: <span id="total-price">0.00</span></p>
+    <p class="total-summary">Общая стоимость: <span id="total-price">0.00</span></p>
 
     <button id="show-dealer-btn" class="button">Перейти к дилерскому калькулятору</button>
 
