@@ -205,22 +205,28 @@
       document.getElementById('producer-payment').textContent=prodPay.toFixed(2);
     }
 
-    // Смена языка
-langSelect.addEventListener('change', e=>{
-  const lang = e.target.value;
-  document.querySelectorAll('[data-key]').forEach(el=>{
-    const key = el.dataset.key;
-    if (!translations[lang][key]) return;
-    const txt = translations[lang][key];
-    // — если внутри есть вложенные спаны (для цифр) — меняем только первый текстовый узел
-    if (el.firstChild && el.firstChild.nodeType === Node.TEXT_NODE) {
-      el.firstChild.nodeValue = txt;
-    } else {
-      el.textContent = txt;
-    }
-  });
-  calculateAll();
-});
+    // Смена языка — исправлено: для элементов без вложенных <span> меняем весь HTML (поддержка \n -> <br>)
+    langSelect.addEventListener('change', e=>{
+      const lang = e.target.value;
+      document.querySelectorAll('[data-key]').forEach(el=>{
+        const key = el.dataset.key;
+        const txt = translations[lang] && translations[lang][key];
+        if(!txt) return;
+
+        // Если внутри есть вложенные <span> (динамические числа/проценты) — меняем только первый текстовый узел
+        if(el.querySelector('span')){
+          if(el.firstChild && el.firstChild.nodeType === Node.TEXT_NODE){
+            el.firstChild.nodeValue = txt;
+          } else {
+            el.insertBefore(document.createTextNode(txt), el.firstChild || null);
+          }
+        } else {
+          // Иначе безопасно заменяем HTML целиком (и переводим \n в <br>)
+          el.innerHTML = txt.replace(/\n/g,'<br>');
+        }
+      });
+      calculateAll();
+    });
 
     // Остальные обработчики
     currencySelect.addEventListener('change', calculateAll);
@@ -230,6 +236,7 @@ langSelect.addEventListener('change', e=>{
     enableRefCheckbox.addEventListener('change', calculateAll);
     document.querySelectorAll('input[name="payment-type"]').forEach(r=>r.addEventListener('change', calculateAll));
 
+    // Показ/скрытие дилерского калькулятора
     showBtn.addEventListener('click', ()=>{
       const pwd=prompt('Введите пароль');
       if(pwd==='QuriStyle'){ dealerSec.style.display='block'; showBtn.style.display='none'; calculateAll(); }
